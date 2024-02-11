@@ -5,6 +5,7 @@ import pytesseract
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 img_lst = ["work.png"]
+extracted_text = []  # List to store extracted text from each image
 
 for i, img_nm in enumerate(img_lst):
     img = cv2.imread(img_nm)
@@ -21,6 +22,30 @@ for i, img_nm in enumerate(img_lst):
             thr = cv2.threshold(erd, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
     bnt = cv2.bitwise_not(thr)
     txt = pytesseract.image_to_string(bnt, config="--psm 6 digits")
+    extracted_text.append(txt)  # Append extracted text to the list
+    print("Extracted text:", txt)  # Print extracted text for debugging
     print("".join([t for t in txt if t.isalnum()]))
     cv2.imshow("bnt", bnt)
     cv2.waitKey(0)
+
+# Save extracted text into a text file
+with open("extracted_text.txt", "w") as text_file:
+    for text in extracted_text:
+        text_file.write(text + "\n")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
